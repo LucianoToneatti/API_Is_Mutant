@@ -2,7 +2,8 @@
 from flask import Flask, request, jsonify
 from services.mutant_service import is_mutant
 from models import DNARecord, Session
-
+#importar os
+import os
 app = Flask(__name__)
 
 @app.route('/mutant/', methods=['POST'])
@@ -41,5 +42,7 @@ def stats():
         "ratio": ratio
     }), 200
 
-if __name__ == '__main__':
-    app.run(debug=True)
+if __name__ == "__main__":
+    # Render establece la variable de entorno PORT para el puerto
+    port = int(os.environ.get("PORT", 5000))  # 5000 es el puerto por defecto
+    app.run(host='0.0.0.0', port=port)
