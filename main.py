@@ -1,7 +1,7 @@
 # main.py
 from flask import Flask, request, jsonify
-from services.mutant_service import is_mutant
-from models import DNARecord, Session
+from mutant_detector.services.mutant_service import is_mutant
+from mutant_detector.models import DNARecord, Session
 #importar os
 import os
 app = Flask(__name__)
