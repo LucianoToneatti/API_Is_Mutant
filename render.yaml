@@ -1,0 +1,10 @@
+services:
+  - type: web
+    name: mutant-detector
+    env: docker
+    plan: free
+    dockerfilePath: ./Dockerfile
+    region: oregon  # Puedes cambiar la región según tu preferencia
+    buildCommand: ""  # Como estás usando Docker, puedes dejar este campo vacío
+    startCommand: ""  # Render usará el CMD definido en el Dockerfile
+    autoDeploy: true
