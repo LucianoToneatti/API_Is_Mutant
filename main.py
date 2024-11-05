@@ -1,9 +1,20 @@
+"""
 from flask import Flask, request, jsonify
 from mutant_detector.services.mutant_service import is_mutant
 from mutant_detector.models import DNARecord, Session
 import os
+import re
 
 app = Flask(__name__)
+
+def is_valid_dna_sequence(dna_sequence):
+    # Validar que sea una matriz NxN
+    n = len(dna_sequence)
+    if not all(len(row) == n for row in dna_sequence):
+        return False
+    # Validar que solo contenga los caracteres permitidos (A, T, C, G)
+    valid_chars = re.compile("^[ATCG]+$")
+    return all(valid_chars.match(row) for row in dna_sequence)
 
 @app.route('/mutant/', methods=['POST'])
 def mutant():
@@ -13,20 +24,42 @@ def mutant():
     if not dna_sequence:
         return jsonify({"message": "DNA sequence is required"}), 400
     
-    is_mutant_result = is_mutant(dna_sequence)
-    session = Session()
+    # Validar formato de ADN
+    if not is_valid_dna_sequence(dna_sequence):
+        return jsonify({"message": "Formato de ADN Incorrecto"}), 400
 
-    # Intentar guardar el registro de ADN
+    # Convertir la secuencia a un string unificado para almacenarlo en la base de datos
+    dna_sequence_str = ",".join(dna_sequence)
+    session = Session()
+    
+    # Verificar si la secuencia de ADN ya existe en la base de datos
+    existing_record = session.query(DNARecord).filter_by(sequence=dna_sequence_str).first()
+    
+    if existing_record:
+        # Si el registro ya existe, retornamos su estado sin intentar guardarlo de nuevo
+        if existing_record.is_mutant:
+            session.close()
+            return jsonify({"message": "Mutant detected"}), 200
+        else:
+            session.close()
+            return jsonify({"message": "Forbidden"}), 403
+    
+    # Si el ADN no existe, procedemos con la detección e inserción en la base de datos
+    is_mutant_result = is_mutant(dna_sequence)
+    
     try:
-        record = DNARecord(sequence=",".join(dna_sequence), is_mutant=int(is_mutant_result))
+        # Crear y guardar el nuevo registro en la base de datos
+        record = DNARecord(sequence=dna_sequence_str, is_mutant=int(is_mutant_result))
         session.add(record)
         session.commit()
     except Exception as e:
         session.rollback()  # Revierte si hay un error
+        session.close()
         return jsonify({"message": "Failed to save DNA record"}), 500
     finally:
         session.close()
 
+    # Responder en función de si el ADN es mutante o no
     if is_mutant_result:
         return jsonify({"message": "Mutant detected"}), 200
     else:
@@ -51,3 +84,5 @@ if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))  # 5000 es el puerto por defecto
     app.run(host='0.0.0.0', port=port)
 
+
+"""
