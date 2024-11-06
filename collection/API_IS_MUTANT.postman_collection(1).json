@@ -1,0 +1,174 @@
+{
+	"info": {
+		"_postman_id": "2654d968-c87c-4cd9-aa18-5749acc64ca9",
+		"name": "API_IS_MUTANT",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "33988249"
+	},
+	"item": [
+		{
+			"name": "empty list",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{}\n\n\n\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://api-is-mutant.onrender.com/mutant/",
+					"protocol": "https",
+					"host": [
+						"api-is-mutant",
+						"onrender",
+						"com"
+					],
+					"path": [
+						"mutant",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get stats",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://api-is-mutant.onrender.com/stats",
+					"protocol": "https",
+					"host": [
+						"api-is-mutant",
+						"onrender",
+						"com"
+					],
+					"path": [
+						"stats"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Is_Mutant",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"dna\": [\"ATGCGC\", \"CAGTGC\", \"TTATGT\", \"AGAAGG\", \"CCCCTA\", \"TCACTG\"]\n}\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://api-is-mutant.onrender.com/mutant/",
+					"protocol": "https",
+					"host": [
+						"api-is-mutant",
+						"onrender",
+						"com"
+					],
+					"path": [
+						"mutant",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Non_Mutant",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"dna\": [\"ATGCGA\", \"CAGTGC\", \"TTATTT\", \"AGACGG\", \"GCGTCA\", \"TCACTG\"]\n}\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://api-is-mutant.onrender.com/mutant/",
+					"protocol": "https",
+					"host": [
+						"api-is-mutant",
+						"onrender",
+						"com"
+					],
+					"path": [
+						"mutant",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "wrong format",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"dna\": [\"ATGCGA\", \"CAGTG\", \"TTATTT\", \"AGACGG\", \"12345A\", \"TCACT\"]\n}\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://api-is-mutant.onrender.com/mutant/",
+					"protocol": "https",
+					"host": [
+						"api-is-mutant",
+						"onrender",
+						"com"
+					],
+					"path": [
+						"mutant",
+						""
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
